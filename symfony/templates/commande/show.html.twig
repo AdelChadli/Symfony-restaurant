@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande{% endblock %}
+
+{% block body %}
+    <h1>Commande</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ commande.id }}</td>
+            </tr>
+            <tr>
+                <th>Restaurant</th>
+                <td>{{ commande.RstCommande.nom }}</td>
+            </tr>
+            <tr>
+                <th>Ligne de commande</th>
+                <td>
+                {% for lignecommande in commande.lgnCommande %}
+                    <li>{{ lignecommande.id }} <a href="{{ path('lignecommande_edit', {'id': lignecommande.id}) }}">Edité</a></li>
+                {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>Prix total</th>
+                <td>{{ commande.prixTT }}</td>
+                <td>
+                
+                </td>
+            </tr>
+            <tr>
+                <th>Commanditaire</th>
+                <td>{{ commande.commanditaire.email }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('lignecommande_new', {'id': commande.id}) }}">Crée une ligne de commande</a>
+
+    <a href="{{ path('acceuil') }}">Annuler</a>
+
+    {{ include('commande/_delete_form.html.twig') }}
+{% endblock %}

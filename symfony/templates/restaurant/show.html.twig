@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Restaurant{% endblock %}
+
+{% block body %}
+    <h1>Restaurant</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ restaurant.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ restaurant.nom }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ restaurant.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Tel</th>
+                <td>{{ restaurant.tel }}</td>
+            </tr>
+            <tr>
+                <th>Liste de produit</th>
+                <td>
+                {% for produit in restaurant.produits %}
+                    <li>{{ produit.nom }} {% if app.user.roles[0] == "ROLE_RESTAURATEUR" %} <a href="{{ path('produit_edit', {'id': produit.id}) }}">Edité</a> {% endif %} </li> 
+                {% endfor %}
+                </td>
+            </tr>
+            {% if app.user.roles[0] == "ROLE_RESTAURATEUR" %}
+                <tr>
+                    <th>Liste de commande</th>
+                    <td>
+                    {% for commande in restaurant.commandes %}
+                        <li>{{ commande.id }}
+                    {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Liste des responsables</th>
+                    <td>
+                    {% for user in restaurant.users %}
+                        <li>{{ user.email }}
+                    {% endfor %}
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('commande_new', {'id': app.user.id}) }}">Crée une commande</a>
+
+    <a href="{{ path('acceuil') }}">Annuler</a>
+
+    {% if app.user.roles[0] == "ROLE_RESTAURATEUR" %}
+        <a href="{{ path('restaurant_edit', {'id': restaurant.id}) }}">Edit</a>
+   
+        {{ include('restaurant/_delete_form.html.twig') }} 
+    {% endif %}
+
+{% endblock %}
